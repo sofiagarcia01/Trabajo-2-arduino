@@ -1,0 +1,41 @@
+
+int distancia = 0;
+
+int promedio = 0;
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT);  
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+ 
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+ 
+  return pulseIn(echoPin, HIGH);
+}
+
+int counter;
+
+void setup()
+{
+  Serial.begin(9600);
+
+}
+
+void loop()
+{
+  promedio = 0;
+  for (counter = 0; counter < 5; ++counter) {
+    distancia = 0.01723 * readUltrasonicDistance(6, 6);
+    promedio = (distancia + promedio);
+    Serial.print("distancia = ");
+    Serial.println(distancia);
+  }
+  promedio = (promedio / 5);
+  Serial.print("El promedio de las distancias es ");
+  Serial.println(promedio);
+  delay(10); 
+}
