@@ -1,0 +1,52 @@
+int promedioDistancia = 0;
+
+int promediaTemperatura = 0;
+
+int distancia = 0;
+
+int temperatura = 0;
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+  pinMode(triggerPin, OUTPUT); 
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+  pinMode(echoPin, INPUT);
+  return pulseIn(echoPin, HIGH);
+}
+
+int counter;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+
+}
+
+void loop()
+{
+  promedioDistancia = 0;
+  promediaTemperatura = 0;
+  for (counter = 0; counter < 5; ++counter) {
+    distancia = 0.01723 * readUltrasonicDistance(7, 7);
+    temperatura = -40 + 0.488155 * (analogRead(A0) - 20);
+    promedioDistancia = (promedioDistancia + distancia);
+    promediaTemperatura = (promediaTemperatura + temperatura);
+    Serial.print("Distancia = ");
+    Serial.print(distancia);
+    Serial.print("Temperatura =");
+    Serial.println(temperatura);
+  }
+  promedioDistancia = (promedioDistancia / 5);
+  promediaTemperatura = (promediaTemperatura / 5);
+  Serial.print("La temperatura promedio es de");
+  Serial.print(promediaTemperatura);
+  Serial.print("grados y la distancia promedio es de");
+  Serial.print(promedioDistancia);
+  Serial.println("cm");
+  delay(10); 
+}
